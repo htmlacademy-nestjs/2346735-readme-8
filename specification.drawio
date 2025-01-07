@@ -1,0 +1,48 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" version="26.0.4">
+  <diagram name="Страница — 1" id="5X001y8DHltol6wDLfZw">
+    <mxGraphModel dx="1232" dy="1095" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="YlzeQk2Lwm7Zh-HVtabS-43" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="YlzeQk2Lwm7Zh-HVtabS-1" target="YlzeQk2Lwm7Zh-HVtabS-40">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="YlzeQk2Lwm7Zh-HVtabS-46" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="YlzeQk2Lwm7Zh-HVtabS-1" target="YlzeQk2Lwm7Zh-HVtabS-42">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="YlzeQk2Lwm7Zh-HVtabS-1" value="API Gateway" style="rounded=0;whiteSpace=wrap;html=1;fontSize=20;" vertex="1" parent="1">
+          <mxGeometry x="280" y="440" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="YlzeQk2Lwm7Zh-HVtabS-47" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.25;exitDx=0;exitDy=0;" edge="1" parent="1" source="YlzeQk2Lwm7Zh-HVtabS-3">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="40" y="445" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="YlzeQk2Lwm7Zh-HVtabS-3" value="Client&amp;nbsp;" style="whiteSpace=wrap;html=1;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="40" y="430" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="YlzeQk2Lwm7Zh-HVtabS-5" value="" style="shape=singleArrow;whiteSpace=wrap;html=1;arrowWidth=0.4;arrowSize=0.4;" vertex="1" parent="1">
+          <mxGeometry x="190" y="430" width="60" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="YlzeQk2Lwm7Zh-HVtabS-33" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;User Service&lt;br&gt;&lt;br&gt;&lt;span style=&quot;color: rgb(51, 51, 51); font-family: &amp;quot;TT Norms Pro&amp;quot;, Arial, sans-serif; font-variant-ligatures: none; text-align: start; background-color: rgb(255, 255, 255);&quot;&gt;PostgreSQL&lt;/span&gt;&lt;/font&gt;" style="whiteSpace=wrap;html=1;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="480" y="280" width="160" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="YlzeQk2Lwm7Zh-HVtabS-40" value="Auth Service&lt;br&gt;&lt;br&gt;&lt;span style=&quot;color: rgb(51, 51, 51); font-family: &amp;quot;TT Norms Pro&amp;quot;, Arial, sans-serif; font-variant-ligatures: none; text-align: start; background-color: rgb(255, 255, 255);&quot;&gt;PostgreSQL&lt;/span&gt;" style="whiteSpace=wrap;html=1;rounded=0;glass=0;fontSize=20;" vertex="1" parent="1">
+          <mxGeometry x="480" y="80" width="160" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="YlzeQk2Lwm7Zh-HVtabS-41" value="Blog Service&lt;br&gt;&lt;br&gt;&lt;span style=&quot;color: rgb(51, 51, 51); font-family: &amp;quot;TT Norms Pro&amp;quot;, Arial, sans-serif; font-variant-ligatures: none; text-align: start; background-color: rgb(255, 255, 255);&quot;&gt;PostgreSQL&lt;/span&gt;" style="whiteSpace=wrap;html=1;rounded=0;fontSize=20;" vertex="1" parent="1">
+          <mxGeometry x="480" y="480" width="160" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="YlzeQk2Lwm7Zh-HVtabS-42" value="Notify Service&lt;br&gt;&lt;br&gt;Rabbit MQ" style="whiteSpace=wrap;html=1;rounded=0;fontSize=20;" vertex="1" parent="1">
+          <mxGeometry x="480" y="680" width="160" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="YlzeQk2Lwm7Zh-HVtabS-44" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0.006;entryY=0.919;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="YlzeQk2Lwm7Zh-HVtabS-1" target="YlzeQk2Lwm7Zh-HVtabS-33">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="YlzeQk2Lwm7Zh-HVtabS-45" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.056;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="YlzeQk2Lwm7Zh-HVtabS-1" target="YlzeQk2Lwm7Zh-HVtabS-41">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
