@@ -34,13 +34,14 @@
       "plugin": "@nx/jest/plugin",
       "options": {
         "targetName": "test"
-      },
-      "exclude": [
-        "apps/auth-service-e2e/**/*",
-        "apps/user-service-e2e/**/*",
-        "apps/blog-service-e2e/**/*",
-        "apps/notification-service-e2e/**/*"
-      ]
+      }
     }
-  ]
+  ],
+  "targetDefaults": {
+    "@nx/js:tsc": {
+      "cache": true,
+      "dependsOn": ["^build"],
+      "inputs": ["production", "^production"]
+    }
+  }
 }
