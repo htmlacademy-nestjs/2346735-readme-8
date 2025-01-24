@@ -5,6 +5,30 @@
   "projectType": "application",
   "tags": [],
   "targets": {
+    "db:generate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx prisma generate --schema ./apps/blog-service/prisma/schema.prisma"
+      }
+    },
+    "db:lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx prisma validate --schema ./apps/blog-service/prisma/schema.prisma"
+      }
+    },
+    "db:migrate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx prisma migrate dev --schema ./apps/blog-service/prisma/schema.prisma --skip-generate --skip-seed --name 'initial migration'"
+      }
+    },
+    "db:seed": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node apps/blog-service/prisma/seed/seed.js"
+      }
+    },
     "build": {
       "executor": "nx:run-commands",
       "options": {
