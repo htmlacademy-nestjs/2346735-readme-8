@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { BlogPostService } from './blog-post.service';
 import { CreateBlogPostDto } from './dto/create-blog-post.dto';
@@ -21,8 +22,13 @@ export class BlogPostController {
   }
 
   @Get()
-  findAll() {
-    return this.blogPostService.findAll();
+  findAll(
+    @Query('page') page: number,
+    @Query('limit') limit: number,
+    @Query('sortBy') sortBy: 'likesCount' | 'commentsCount',
+    @Query('search') search: string
+  ) {
+    return this.blogPostService.findAll({ page, limit, sortBy, search });
   }
 
   @Get(':id')

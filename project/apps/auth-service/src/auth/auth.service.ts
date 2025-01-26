@@ -6,14 +6,14 @@ import { LoginDto } from './dto/login.dto';
 export class AuthService {
   constructor(private readonly jwtService: JwtService) {}
 
-  async login(user: LoginDto) {
-    // const user = await this.validateUser(loginDto.email, loginDto.password);
+  async login(loginDto: LoginDto) {
+    const user = await this.validateUser(loginDto.email, loginDto.password);
 
     // if (!user) {
     //   throw new Error('Invalid email or password');
     // }
 
-    const payload = { username: user.email };
+    const payload = { username: user.email, userId: user.id };
     return {
       token: this.jwtService.sign(payload),
     };
