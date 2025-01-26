@@ -1,0 +1,20 @@
+{
+  "name": "teset-lib",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/teset-lib/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/teset-lib",
+        "tsConfig": "libs/teset-lib/tsconfig.lib.json",
+        "packageJson": "libs/teset-lib/package.json",
+        "main": "libs/teset-lib/src/index.ts",
+        "assets": ["libs/teset-lib/*.md"]
+      }
+    }
+  }
+}

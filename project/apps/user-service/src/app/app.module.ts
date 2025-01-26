@@ -36,6 +36,16 @@ const ENV_USERS_FILE_PATH = path.resolve(__dirname, '../user/.env');
         )}/${configService.get<string>('MONGO_DB')}`;
         console.log(uri);
 
+        // return {
+        //   uri: `mongodb://${configService.get<string>(
+        //     'MONGO_USER'
+        //   )}:${configService.get<string>(
+        //     'MONGO_PASSWORD'
+        //   )}@${configService.get<string>(
+        //     'MONGO_HOST'
+        //   )}:${configService.get<number>('MONGO_PORT')}/admin`,
+        // };
+
         return {
           uri: `mongodb://${configService.get<string>(
             'MONGO_USER'
@@ -43,7 +53,9 @@ const ENV_USERS_FILE_PATH = path.resolve(__dirname, '../user/.env');
             'MONGO_PASSWORD'
           )}@${configService.get<string>(
             'MONGO_HOST'
-          )}:${configService.get<number>('MONGO_PORT')}/admin`,
+          )}:${configService.get<number>(
+            'MONGO_PORT'
+          )}/${configService.get<string>('MONGO_DB')}?authSource=admin`,
         };
       },
       inject: [ConfigService],

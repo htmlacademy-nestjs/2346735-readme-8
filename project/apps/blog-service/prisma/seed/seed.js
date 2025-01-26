@@ -1,6 +1,8 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
+// const
+
 async function main() {
   try {
     await prisma.category.upsert({

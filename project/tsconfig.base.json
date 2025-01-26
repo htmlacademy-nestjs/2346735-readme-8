@@ -16,7 +16,8 @@
     "baseUrl": ".",
     "paths": {
       "@project/prisma": ["libs/prisma/src/index.ts"],
-      "@project/shared": ["libs/shared/src/index.ts"]
+      "@project/shared": ["libs/shared/src/index.ts"],
+      "@project/teset-lib": ["libs/teset-lib/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
