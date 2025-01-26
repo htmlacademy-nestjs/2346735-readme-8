@@ -21,15 +21,49 @@ export class BlogPostService {
     });
   }
 
-  async findAll() {
-    return this.prisma.post.findMany({
-      include: {
-        categories: true,
-        comments: true,
-        favorite: true,
-      },
-    });
+  async findAll({ page = 1, limit = 2, sortBy, search }) {
+    const skip = (page - 1) * limit;
+    const orderBy = sortBy ? { [sortBy]: 'desc' } : undefined;
+
+    const where = search
+      ? { title: { contains: search, mode: 'insensitive' } }
+      : undefined;
+
+    const [data, total] = await Promise.all([
+      this.prisma.post.findMany({
+        // @ts-expect-error mode insensitive with contains prisma issue https://github.com/prisma/prisma/issues/18413
+        where,
+        include: {
+          categories: true,
+          comments: true,
+          favorite: true,
+        },
+        orderBy,
+        skip,
+        take: limit,
+      }),
+      // @ts-expect-error mode insensitive with contains prisma issue https://github.com/prisma/prisma/issues/18413
+      this.prisma.post.count({ where }),
+    ]);
+
+    return {
+      data,
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+    };
   }
+
+  // async findAll() {
+  //   return this.prisma.post.findMany({
+  //     include: {
+  //       categories: true,
+  //       comments: true,
+  //       favorite: true,
+  //     },
+  //   });
+  // }
 
   async findOne(id: string) {
     return this.prisma.post.findUnique({

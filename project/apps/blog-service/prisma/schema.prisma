@@ -3,7 +3,12 @@
 
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
+enum PostStatus {
+  DRAFT
+  MODERATION
+  PUBLISHED
+  ARCHIVED
+}
 generator client {
   provider = "prisma-client-js"
 }
@@ -24,6 +29,8 @@ model Post {
   userId      String @map("user_id")
   comments    Comment[]
   favorite    Favorite[]
+  originalPostId String @default("") @map("original_post_id")
+  status          PostStatus   @default(DRAFT)
 
   @@index([title])
   @@map("posts")
@@ -47,7 +54,6 @@ model Comment {
   updatedAt   DateTime  @updatedAt @map("updated_at")
   post        Post      @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   postId      String    @map("post_id")
-
   @@index([postId])
   @@map("comments")
 }

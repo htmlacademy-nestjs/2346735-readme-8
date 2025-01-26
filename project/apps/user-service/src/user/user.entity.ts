@@ -33,16 +33,8 @@ export class User extends Document implements IUser {
     example: 'password123',
   })
   @IsString()
+  @Length(6, 12)
   password: string;
-
-  @Prop({ default: 'user' })
-  @ApiProperty({
-    description: 'The role of the user',
-    type: String,
-    example: 'user',
-  })
-  @IsString()
-  role: string;
 
   @Prop({ required: false })
   @ApiProperty({
@@ -52,6 +44,7 @@ export class User extends Document implements IUser {
     required: false,
   })
   @IsString()
+  // Ограничения: не больше 500 килобайт, формат jpg или png. в multer
   avatar: string;
 
   async hashPassword() {
