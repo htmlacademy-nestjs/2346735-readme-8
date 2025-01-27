@@ -6,14 +6,16 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UserModule } from '../user/user.module';
 import { SharedModule } from '@project/shared';
-import { SubscriptionModule } from './subscription/subscription.module';
+// import { SubscriptionModule } from './subscription/subscription.module';
+import { FileUploadModule } from '@project/file-upload';
 
 const ENV_USERS_FILE_PATH = path.resolve(__dirname, '../user/.env');
 
 @Module({
   imports: [
     SharedModule,
-    SubscriptionModule,
+    FileUploadModule,
+    // SubscriptionModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: ENV_USERS_FILE_PATH,
