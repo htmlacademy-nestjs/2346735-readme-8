@@ -5,7 +5,7 @@ import { IsEmail, IsString, Length } from 'class-validator';
 import * as bcrypt from 'bcrypt';
 import { IUser } from './user.interface';
 
-@Schema({ timestamps: true })
+@Schema({ timestamps: true, versionKey: false })
 export class User extends Document implements IUser {
   @Prop({ required: true })
   @ApiProperty({
@@ -61,12 +61,27 @@ export class User extends Document implements IUser {
 
 const UserSchema = SchemaFactory.createForClass(User);
 
-UserSchema.pre('save', async function (next) {
-  if (this.isModified('password') || this.isNew) {
-    const salt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password, salt);
-  }
-  next();
-});
+// UserSchema.pre('save', async function (next) {
+//   if (this.isModified('password') || this.isNew) {
+//     const salt = await bcrypt.genSalt(10);
+//     this.password = await bcrypt.hash(this.password, salt);
+//   }
+//   next();
+// });
+
+// UserSchema.set('toJSON', {
+//   transform: function (doc, ret) {
+//     delete ret.password;
+//     return ret;
+//   },
+// });
+
+// // или аналогично с toObject
+// UserSchema.set('toObject', {
+//   transform: function (doc, ret) {
+//     delete ret.password;
+//     return ret;
+//   },
+// });
 
 export { UserSchema };

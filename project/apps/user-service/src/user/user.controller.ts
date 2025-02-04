@@ -6,19 +6,22 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { User } from './user.entity';
+// import { AuthGuard } from '@project/auth-lib';
 
 @ApiTags('Users')
-@Controller('user')
+@Controller()
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post()
+  @Post('user')
   @ApiOperation({ summary: 'Create a new user' })
   @ApiResponse({
     status: 201,
@@ -33,7 +36,32 @@ export class UserController {
     return this.userService.create(createUserDto);
   }
 
-  @Get()
+  @Get('user-by-email')
+  @ApiOperation({ summary: 'Get user by email' })
+  @ApiResponse({
+    status: 200,
+    description: 'Successfully retrieved the user by email.',
+    type: User,
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'User not found.',
+  })
+  @ApiResponse({
+    status: 500,
+    description: 'Internal server error.',
+  })
+  async getUserByEmail(@Query('email') email: string) {
+    return await this.userService.findByEmail(email);
+  }
+
+  @Post('batch')
+  async getUsersBatch(@Body() { userIds }: { userIds: string[] }) {
+    // Получаем пользователей по массиву id
+    return this.userService.findUsersByIds(userIds);
+  }
+
+  @Get('user')
   @ApiOperation({ summary: 'Get all users' })
   @ApiResponse({
     status: 200,
@@ -49,11 +77,12 @@ export class UserController {
   }
 
   @Get('now')
+  // @UseGuards(AuthGuard)
   now() {
     return this.userService.now();
   }
 
-  @Get(':id')
+  @Get('user/:id')
   @ApiOperation({ summary: 'Get a user by ID' })
   @ApiResponse({
     status: 200,
@@ -72,7 +101,7 @@ export class UserController {
     return this.userService.findOne(id);
   }
 
-  @Patch(':id')
+  @Patch('user/:id')
   @ApiOperation({ summary: 'Update a user' })
   @ApiResponse({
     status: 200,
@@ -91,7 +120,7 @@ export class UserController {
     return this.userService.update(id, updateUserDto);
   }
 
-  @Delete(':id')
+  @Delete('user/:id')
   @ApiOperation({ summary: 'Delete a user' })
   @ApiResponse({
     status: 200,

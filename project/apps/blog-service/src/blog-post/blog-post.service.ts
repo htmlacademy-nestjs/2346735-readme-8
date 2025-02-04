@@ -2,49 +2,147 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@project/prisma';
 import { CreateBlogPostDto } from './dto/create-blog-post.dto';
 import { UpdateBlogPostDto } from './dto/update-blog-post.dto';
-
+import axios from 'axios';
+import { ConfigService } from '@nestjs/config';
 @Injectable()
 export class BlogPostService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly configService: ConfigService
+  ) {}
 
   async create(createBlogPostDto: CreateBlogPostDto) {
+    //  c тегами ещё можно сделать чтоб их триммить и привродить к нижнему регистру
+    //  перед проверкой и сохранением, но это, думаю, ладно, для тестового проекта и так сойдёт
+    const tagTitles = createBlogPostDto.tags || [];
+
+    const payload = {
+      data: Object.entries(createBlogPostDto).reduce((acc, [key, value]) => {
+        if (value !== undefined) acc[key] = value;
+        return acc;
+      }, {}),
+    };
+
+    if (tagTitles.length) {
+      const existingTags = await this.prisma.tag.findMany({
+        where: { title: { in: tagTitles } },
+      });
+
+      const existingTagTitles = existingTags.map((tag) => tag.title);
+      const newTagTitles = tagTitles.filter(
+        (title) => !existingTagTitles.includes(title)
+      );
+
+      const newTags = await Promise.all(
+        newTagTitles.map((title) => this.prisma.tag.create({ data: { title } }))
+      );
+
+      const allTagIds = [...existingTags, ...newTags].map((tag) => ({
+        id: tag.id,
+      }));
+
+      // @ts-expect-error it is okkkk
+      payload.data.tags = {
+        connect: allTagIds,
+      };
+    }
+
+    // @ts-expect-error it is okkkk
     return this.prisma.post.create({
-      data: {
-        title: createBlogPostDto.title,
-        description: createBlogPostDto.description,
-        content: createBlogPostDto.content,
-        userId: createBlogPostDto.userId,
-        categories: {
-          connect: createBlogPostDto.categoryIds.map((id) => ({ id })),
-        },
-      },
+      ...payload,
+      include: { tags: true },
     });
   }
 
-  async findAll({ page = 1, limit = 2, sortBy, search }) {
+  async findAll({
+    page = 1,
+    limit = 10,
+    sortBy,
+    search,
+    order = 'desc',
+    tags,
+    userId,
+    status = 'PUBLISHED',
+  }) {
     const skip = (page - 1) * limit;
-    const orderBy = sortBy ? { [sortBy]: 'desc' } : undefined;
 
-    const where = search
-      ? { title: { contains: search, mode: 'insensitive' } }
-      : undefined;
+    const validSortFields = {
+      likesCount: { favorite: { _count: order } },
+      commentsCount: { comments: { _count: order } },
+      createdAt: { createdAt: order },
+      title: { title: order },
+    };
+
+    const orderBy =
+      sortBy && validSortFields[sortBy]
+        ? validSortFields[sortBy]
+        : { createdAt: 'desc' };
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const where: any = {
+      status,
+    };
+
+    if (userId) {
+      where.userId = userId;
+    }
+
+    if (search) {
+      where.title = { contains: search, mode: 'insensitive' };
+    }
+
+    if (tags?.length) {
+      where.tags = {
+        some: {
+          title: { in: tags },
+        },
+      };
+    }
 
     const [data, total] = await Promise.all([
       this.prisma.post.findMany({
-        // @ts-expect-error mode insensitive with contains prisma issue https://github.com/prisma/prisma/issues/18413
         where,
-        include: {
-          categories: true,
+        select: {
+          id: true,
+          title: true,
+          description: true,
+          content: true,
+          createdAt: true,
+          updatedAt: true,
           comments: true,
           favorite: true,
+          status: true,
+          type: true,
+          userId: true,
+          _count: {
+            select: {
+              comments: true,
+              favorite: true,
+            },
+          },
         },
         orderBy,
         skip,
         take: limit,
       }),
-      // @ts-expect-error mode insensitive with contains prisma issue https://github.com/prisma/prisma/issues/18413
       this.prisma.post.count({ where }),
     ]);
+
+    const userIds = [...new Set(data.map((post) => post.userId))];
+
+    const { data: users } = await axios.post(
+      `${this.configService.get<string>('USER_SERVICE_URL')}/api/batch`,
+      { userIds }
+    );
+
+    const usersMap = new Map(users.map((user) => [user._id, user]));
+
+    data.forEach((item) => {
+      // @ts-expect-error it is okkkk
+      item.user = usersMap.get(item.userId) || null;
+      // @ts-expect-error it is okkkk
+      item.isRepost = !!item.originalPostId && !!item.originalUserId;
+    });
 
     return {
       data,
@@ -55,21 +153,11 @@ export class BlogPostService {
     };
   }
 
-  // async findAll() {
-  //   return this.prisma.post.findMany({
-  //     include: {
-  //       categories: true,
-  //       comments: true,
-  //       favorite: true,
-  //     },
-  //   });
-  // }
-
   async findOne(id: string) {
     return this.prisma.post.findUnique({
       where: { id },
       include: {
-        categories: true,
+        tags: true,
         comments: true,
         favorite: true,
       },
@@ -83,9 +171,9 @@ export class BlogPostService {
         title: updateBlogPostDto.title,
         description: updateBlogPostDto.description,
         content: updateBlogPostDto.content,
-        categories: {
-          set: updateBlogPostDto.categoryIds.map((id) => ({ id })),
-        },
+        // categories: {
+        //   set: updateBlogPostDto.categoryIds.map((id) => ({ id })),
+        // },
       },
     });
   }
@@ -94,5 +182,9 @@ export class BlogPostService {
     return this.prisma.post.delete({
       where: { id },
     });
+  }
+
+  async getCountByUserId(userId: string) {
+    return this.prisma.post.count({ where: { userId } });
   }
 }

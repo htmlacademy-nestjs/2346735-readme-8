@@ -21,14 +21,43 @@ export class BlogPostController {
     return this.blogPostService.create(createBlogPostDto);
   }
 
+  @Post('repost')
+  async repost(
+    @Body() createBlogPostDto: CreateBlogPostDto,
+    @Query('userId') userId: string
+  ) {
+    createBlogPostDto.originalPostId = createBlogPostDto.id;
+    createBlogPostDto.originalUserId = createBlogPostDto.userId;
+    createBlogPostDto.userId = userId;
+    return this.blogPostService.create(createBlogPostDto);
+  }
+
+  @Get('count')
+  count(@Query('userId') userId: string) {
+    return this.blogPostService.getCountByUserId(userId);
+  }
+
   @Get()
   findAll(
     @Query('page') page: number,
     @Query('limit') limit: number,
     @Query('sortBy') sortBy: 'likesCount' | 'commentsCount',
-    @Query('search') search: string
+    @Query('search') search: string,
+    @Query('tags') tags: string[] = [],
+    @Query('userId') userId = '',
+    @Query('status') status = 'PUBLISHED',
+    @Query('order') order = 'desc'
   ) {
-    return this.blogPostService.findAll({ page, limit, sortBy, search });
+    return this.blogPostService.findAll({
+      page,
+      limit,
+      sortBy,
+      search,
+      tags,
+      status,
+      userId,
+      order,
+    });
   }
 
   @Get(':id')

@@ -8,6 +8,7 @@ import { UserModule } from '../user/user.module';
 import { SharedModule } from '@project/shared';
 // import { SubscriptionModule } from './subscription/subscription.module';
 import { FileUploadModule } from '@project/file-upload';
+import { AuthLibModule } from '@project/auth-lib';
 
 const ENV_USERS_FILE_PATH = path.resolve(__dirname, '../user/.env');
 
@@ -15,6 +16,7 @@ const ENV_USERS_FILE_PATH = path.resolve(__dirname, '../user/.env');
   imports: [
     SharedModule,
     FileUploadModule,
+    AuthLibModule,
     // SubscriptionModule,
     ConfigModule.forRoot({
       isGlobal: true,
