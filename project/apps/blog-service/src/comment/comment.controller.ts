@@ -7,8 +7,10 @@ import {
   Get,
   Put,
   Patch,
+  UseGuards,
 } from '@nestjs/common';
 import { CommentService } from './comment.service';
+import { OwnerGuard } from '@project/auth-lib';
 
 @Controller('comment')
 export class CommentController {
@@ -22,11 +24,13 @@ export class CommentController {
   }
 
   @Put(':id')
+  @UseGuards(OwnerGuard)
   async replace(@Param('id') id: string, @Body() body: { content: string }) {
     return this.commentService.update(id, body.content);
   }
 
   @Patch(':id')
+  @UseGuards(OwnerGuard)
   async update(@Param('id') id: string, @Body() body: { content?: string }) {
     if (body.content) {
       return this.commentService.update(id, body.content);
@@ -35,6 +39,7 @@ export class CommentController {
   }
 
   @Delete(':id')
+  @UseGuards(OwnerGuard)
   async remove(@Param('id') id: string) {
     return this.commentService.remove(id);
   }

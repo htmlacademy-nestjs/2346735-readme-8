@@ -7,11 +7,12 @@ import {
   Param,
   Delete,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { BlogPostService } from './blog-post.service';
 import { CreateBlogPostDto } from './dto/create-blog-post.dto';
 import { UpdateBlogPostDto } from './dto/update-blog-post.dto';
-
+import { OwnerGuard } from '@project/auth-lib';
 @Controller('post')
 export class BlogPostController {
   constructor(private readonly blogPostService: BlogPostService) {}
@@ -66,6 +67,7 @@ export class BlogPostController {
   }
 
   @Patch(':id')
+  @UseGuards(OwnerGuard)
   update(
     @Param('id') id: string,
     @Body() updateBlogPostDto: UpdateBlogPostDto
@@ -74,6 +76,7 @@ export class BlogPostController {
   }
 
   @Delete(':id')
+  @UseGuards(OwnerGuard)
   remove(@Param('id') id: string) {
     return this.blogPostService.remove(id);
   }

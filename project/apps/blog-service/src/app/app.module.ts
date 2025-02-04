@@ -14,7 +14,7 @@ import { CommentService } from '../comment/comment.service';
 
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { resolve } from 'node:path';
-
+import { AuthLibModule } from '@project/auth-lib';
 @Module({
   imports: [
     PrismaModule.forRoot('apps/blog-post/prisma/schema.prisma'),
@@ -22,6 +22,7 @@ import { resolve } from 'node:path';
     FavoriteModule,
     TagModule,
     CommentModule,
+    AuthLibModule,
     ConfigModule.forRoot({
       envFilePath: resolve(__dirname, '..', '.env'),
       isGlobal: true,
