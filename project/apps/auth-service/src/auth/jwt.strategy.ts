@@ -21,7 +21,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     // return this.authService.validateUser(payload);
     return {
       email: payload.email,
-      // id: payload.id,
+      id: payload.id,
     };
   }
 }

@@ -4,23 +4,36 @@ import { Model } from 'mongoose';
 import { User } from './user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { formatDate } from '@project/shared';
+// import { formatDate } from '@project/shared';
 import axios from 'axios';
 import { ConfigService } from '@nestjs/config';
+import { RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
+import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectModel('User') private userModel: Model<User>,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
+    private readonly amqpConnection: AmqpConnection
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     const createdUser = new this.userModel(createUserDto);
+
     return createdUser.save();
   }
 
   async findAll(): Promise<User[]> {
+    await this.amqpConnection.publish(
+      'typoteka.notify.income',
+      'user.registered',
+      {
+        userId: 123123123,
+        email: 234523452345,
+      }
+    );
+
     return await this.userModel.find().exec();
   }
 
@@ -43,6 +56,7 @@ export class UserService {
 
   async findByEmail(email: string): Promise<User | null> {
     const data = await this.userModel.findOne({ email }).exec();
+
     return data;
   }
 
@@ -60,7 +74,23 @@ export class UserService {
     return await this.userModel.findByIdAndDelete(id).exec();
   }
 
-  now() {
-    return { date: formatDate(new Date()) };
+  @RabbitSubscribe({
+    exchange: 'typoteka.notify.income',
+    routingKey: 'user.registered',
+    queue: 'notify_queue',
+  })
+  nnnnow(data) {
+    console.log('какая nnnnow data:', data);
+    // return { date: formatDate(new Date()) };
+  }
+
+  @RabbitSubscribe({
+    exchange: 'typoteka.notify.income',
+    routingKey: 'user.registered',
+    queue: 'notify_queue',
+  })
+  now(data) {
+    console.log('какая то data:', data);
+    // return { date: formatDate(new Date()) };
   }
 }

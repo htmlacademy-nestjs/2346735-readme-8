@@ -15,6 +15,9 @@ import { CommentService } from '../comment/comment.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { resolve } from 'node:path';
 import { AuthLibModule } from '@project/auth-lib';
+import { JwtModule } from '@nestjs/jwt';
+import { JwtService } from '@nestjs/jwt';
+
 @Module({
   imports: [
     PrismaModule.forRoot('apps/blog-post/prisma/schema.prisma'),
@@ -23,6 +26,16 @@ import { AuthLibModule } from '@project/auth-lib';
     TagModule,
     CommentModule,
     AuthLibModule,
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        secret: configService.get<string>('JWT_SECRET'),
+        signOptions: {
+          expiresIn: configService.get<string>('JWT_EXPIRES_IN', '1h'),
+        },
+      }),
+    }),
     ConfigModule.forRoot({
       envFilePath: resolve(__dirname, '..', '.env'),
       isGlobal: true,
@@ -35,6 +48,7 @@ import { AuthLibModule } from '@project/auth-lib';
     TagService,
     FavoriteService,
     CommentService,
+    JwtService,
   ],
 })
 export class AppModule {}

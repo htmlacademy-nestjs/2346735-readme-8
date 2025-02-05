@@ -3,7 +3,7 @@ import { AuthGuard } from './guards/auth.guard';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { JwtModule } from '@nestjs/jwt';
+import { JwtModule, JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -12,7 +12,6 @@ import { JwtModule } from '@nestjs/jwt';
       envFilePath: 'libs/auth-lib/.env',
     }),
     PassportModule.register({ defaultStrategy: 'jwt' }),
-    // PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -24,7 +23,7 @@ import { JwtModule } from '@nestjs/jwt';
       }),
     }),
   ],
-  providers: [AuthGuard, JwtStrategy],
-  exports: [AuthGuard, JwtStrategy, ConfigModule, PassportModule],
+  providers: [AuthGuard, JwtStrategy, JwtService],
+  exports: [AuthGuard, JwtStrategy, JwtService, ConfigModule, PassportModule],
 })
 export class AuthLibModule {}

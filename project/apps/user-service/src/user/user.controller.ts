@@ -79,7 +79,7 @@ export class UserController {
   @Get('now')
   // @UseGuards(AuthGuard)
   now() {
-    return this.userService.now();
+    return this.userService.now('abc');
   }
 
   @Get('user/:id')

@@ -104,21 +104,6 @@ export class AuthService {
         return null;
       }
 
-      console.log('---password------------------------');
-      console.log(password);
-      console.log('--password-------------------------');
-
-      console.log('---user.password------------------------');
-      console.log(user.password);
-      console.log('--user.password-------------------------');
-
-      console.log(
-        await compare(
-          'bbbbb',
-          '$2b$10$DizAV4nsyUSfZi6nyzPZ3uEDNn8unWUIGQMrzfOqlhl.DjEknZ/6W'
-        )
-      );
-
       const isPasswordValid = await compare(password, user.password);
 
       return isPasswordValid ? user : null;
