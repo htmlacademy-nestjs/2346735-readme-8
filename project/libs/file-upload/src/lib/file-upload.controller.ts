@@ -1,25 +1,30 @@
+import { randomUUID } from 'node:crypto';
+import { join } from 'node:path';
+import { ensureDir } from 'fs-extra';
+
 import {
   Controller,
   Post,
-  Get,
   UploadedFile,
   UseInterceptors,
-  Body,
-  Query,
 } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiConsumes, ApiBody } from '@nestjs/swagger';
+
 import { FileInterceptor } from '@nestjs/platform-express';
-import { FileUploadService } from './file-upload.service';
-import { ensureDir } from 'fs-extra';
+
 import { diskStorage } from 'multer';
 import * as mime from 'mime-types';
-import { randomUUID } from 'node:crypto';
-import { join } from 'node:path';
 
+@ApiTags('file-upload')
 @Controller('file-upload')
 export class FileUploadController {
-  constructor(private readonly fileUploadService: FileUploadService) {}
-
   @Post('upload')
+  @ApiOperation({ summary: 'Upload a file' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description: 'The file to be uploaded',
+    type: 'multipart/form-data',
+  })
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
@@ -48,13 +53,13 @@ export class FileUploadController {
         },
       }),
       limits: {
-        fileSize: 2 * 1024 * 1024,
+        fileSize: 2 * 1024 * 1024, // 2 MB limit
       },
       fileFilter: (req, file, callback) => {
         const allowedMimes = ['image/jpeg', 'image/jpg', 'image/png'];
 
         if (!allowedMimes.includes(file.mimetype)) {
-          return callback(new Error('Тип файла не разрешен'), false);
+          return callback(new Error('Invalid file type'), false);
         }
 
         callback(null, true);

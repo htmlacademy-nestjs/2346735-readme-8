@@ -1,12 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { User } from './user.entity';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import axios from 'axios';
 import { ConfigService } from '@nestjs/config';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
+import { Model } from 'mongoose';
+
+import { User } from './user.entity';
+
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+
+import axios from 'axios';
 
 @Injectable()
 export class UserService {

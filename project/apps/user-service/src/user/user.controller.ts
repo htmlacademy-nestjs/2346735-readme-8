@@ -7,14 +7,15 @@ import {
   Param,
   Delete,
   Query,
-  UseGuards,
 } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+
 import { UserService } from './user.service';
+
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+
 import { User } from './user.entity';
-// import { AuthGuard } from '@project/auth-lib';
 
 @ApiTags('Users')
 @Controller()

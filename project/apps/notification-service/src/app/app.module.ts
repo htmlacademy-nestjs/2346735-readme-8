@@ -1,10 +1,12 @@
+import { resolve } from 'node:path';
+
 import { Module } from '@nestjs/common';
+import { ScheduleModule } from '@nestjs/schedule';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { SendEmailModule } from '../send-email/send-email.module';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { resolve } from 'node:path';
-import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [

@@ -19,27 +19,16 @@ import { ConfigService } from '@nestjs/config';
           },
         },
         template: {
-          dir:
-            process.env.NODE_ENV === 'production'
-              ? join(
-                  __dirname,
-                  '..',
-                  '..',
-                  'dist',
-                  'libs',
-                  'send-email',
-                  'templates'
-                )
-              : join(
-                  __dirname,
-                  '..',
-                  '..',
-                  'libs',
-                  'send-email',
-                  'src',
-                  'lib',
-                  'templates'
-                ),
+          dir: join(
+            __dirname,
+            '..',
+            '..',
+            'libs',
+            'send-email',
+            'src',
+            'lib',
+            'templates'
+          ),
           adapter: new HandlebarsAdapter(),
           options: {
             strict: true,

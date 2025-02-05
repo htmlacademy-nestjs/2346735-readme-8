@@ -5,6 +5,7 @@ import { AuthModule } from '../auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { resolve } from 'node:path';
 import { AuthLibModule } from '@project/auth-lib';
+
 @Module({
   imports: [
     AuthLibModule,

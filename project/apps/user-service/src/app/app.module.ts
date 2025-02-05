@@ -1,15 +1,17 @@
 import { resolve } from 'node:path';
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { UserModule } from '../user/user.module';
+
 import { SharedModule } from '@project/shared';
-// import { SubscriptionModule } from './subscription/subscription.module';
 import { FileUploadModule } from '@project/file-upload';
 import { AuthLibModule } from '@project/auth-lib';
 import { MessagingModule } from '@project/messaging';
+
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+// import { SubscriptionModule } from './subscription/subscription.module';
+import { UserModule } from '../user/user.module';
 
 @Module({
   imports: [
@@ -22,25 +24,6 @@ import { MessagingModule } from '@project/messaging';
       isGlobal: true,
       envFilePath: resolve(__dirname, '../user/.env'),
     }),
-    // RabbitMQModule.forRootAsync({
-    //   useFactory: async (config: ConfigService) => ({
-    //     exchanges: [
-    //       {
-    //         name: config.get<string>('RABBIT_QUEUE'),
-    //         type: 'direct',
-    //       },
-    //     ],
-    //     uri: `amqp://${config.get<string>('RABBIT_USER')}:${config.get<string>(
-    //       'RABBIT_PASSWORD'
-    //     )}@${config.get<string>('RABBIT_HOST')}:${config.get<string>(
-    //       'RABBIT_PORT'
-    //     )}`,
-    //     connectionInitOptions: { wait: false },
-    //     enableControllerDiscovery: true,
-    //   }),
-    //   // imports: [ConfigModule],
-    //   inject: [ConfigService],
-    // }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => {
@@ -63,7 +46,6 @@ import { MessagingModule } from '@project/messaging';
     UserModule,
   ],
   controllers: [AppController],
-  // providers: [AppService, UserService],
   providers: [AppService],
 })
 export class AppModule {}

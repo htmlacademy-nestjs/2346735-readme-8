@@ -10,7 +10,7 @@ export class SendEmailService {
     await this.mailerService.sendMail({
       to,
       subject,
-      template, // Имя шаблона (без .hbs)
+      template,
       context,
     });
   }

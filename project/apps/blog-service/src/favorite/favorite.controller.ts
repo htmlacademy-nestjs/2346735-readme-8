@@ -1,6 +1,7 @@
 import { Controller, Post, Delete, Get, Param, Body } from '@nestjs/common';
-import { FavoriteService } from './favorite.service';
 import { ApiTags, ApiOperation, ApiParam, ApiBody } from '@nestjs/swagger';
+
+import { FavoriteService } from './favorite.service';
 
 @ApiTags('favorites')
 @Controller('favorite')

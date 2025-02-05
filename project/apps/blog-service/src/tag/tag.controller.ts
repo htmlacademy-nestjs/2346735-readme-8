@@ -7,10 +7,12 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiParam, ApiBody } from '@nestjs/swagger';
+
 import { TagService } from './tag.service';
+
 import { CreateTagDto } from './dto/create-tag.dto';
 import { UpdateTagDto } from './dto/update-tag.dto';
-import { ApiTags, ApiOperation, ApiParam, ApiBody } from '@nestjs/swagger';
 
 @ApiTags('tags')
 @Controller('tag')

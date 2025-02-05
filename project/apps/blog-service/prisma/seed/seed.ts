@@ -31,8 +31,6 @@ async function main() {
       data: { id: crypto.randomUUID(), title: 'Lifestyle' },
     });
 
-    const postStatuses = ['DRAFT', 'PUBLISHED'];
-
     const postTypes = ['text', 'video', 'photo', 'link', 'quote'];
 
     const categoryIds = [
