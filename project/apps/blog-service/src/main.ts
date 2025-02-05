@@ -12,11 +12,17 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  app.enableCors({
+    origin: '*', // Разрешаем доступ с любых источников, а на деле нужно только к нашим портам
+    methods: 'GET,POST,PUT,DELETE',
+    allowedHeaders: 'Content-Type, Authorization',
+  });
+
   const config = new DocumentBuilder()
-    .setTitle('User')
-    .setDescription('Users API description')
+    .setTitle('Blog')
+    .setDescription('Blog API description')
     .setVersion('1.0')
-    .addTag('user')
+    .addTag('blog')
     .build();
 
   const documentFactory = () => SwaggerModule.createDocument(app, config);

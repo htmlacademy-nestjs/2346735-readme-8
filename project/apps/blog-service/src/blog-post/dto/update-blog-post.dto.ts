@@ -15,5 +15,5 @@ export class UpdateBlogPostDto {
 
   @IsString()
   @IsOptional()
-  categoryIds?: string[];
+  tags?: string[];
 }

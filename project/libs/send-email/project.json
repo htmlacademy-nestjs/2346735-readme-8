@@ -1,0 +1,20 @@
+{
+  "name": "send-email",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/send-email/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/send-email",
+        "tsConfig": "libs/send-email/tsconfig.lib.json",
+        "packageJson": "libs/send-email/package.json",
+        "main": "libs/send-email/src/index.ts",
+        "assets": ["libs/send-email/*.md"]
+      }
+    }
+  }
+}
