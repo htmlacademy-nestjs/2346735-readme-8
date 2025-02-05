@@ -12,6 +12,8 @@ import { FavoriteService } from '../favorite/favorite.service';
 import { CommentModule } from '../comment/comment.module';
 import { CommentService } from '../comment/comment.service';
 
+import { MessagingModule } from '@project/messaging';
+
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { resolve } from 'node:path';
 import { AuthLibModule } from '@project/auth-lib';
@@ -26,6 +28,7 @@ import { JwtService } from '@nestjs/jwt';
     TagModule,
     CommentModule,
     AuthLibModule,
+    MessagingModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

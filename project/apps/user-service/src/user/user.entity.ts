@@ -44,7 +44,6 @@ export class User extends Document implements IUser {
     required: false,
   })
   @IsString()
-  // Ограничения: не больше 500 килобайт, формат jpg или png. в multer
   avatar: string;
 
   async hashPassword() {

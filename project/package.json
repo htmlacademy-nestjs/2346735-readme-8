@@ -16,6 +16,7 @@
     "@nestjs/mongoose": "^11.0.0",
     "@nestjs/passport": "^11.0.3",
     "@nestjs/platform-express": "^11.0.5",
+    "@nestjs/schedule": "^5.0.1",
     "@nestjs/swagger": "^11.0.2",
     "@nrwl/node": "^19.8.4",
     "@prisma/client": "^6.2.1",

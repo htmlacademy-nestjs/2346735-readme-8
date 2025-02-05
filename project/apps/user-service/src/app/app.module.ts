@@ -1,4 +1,4 @@
-import path from 'path';
+import { resolve } from 'node:path';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -10,9 +10,6 @@ import { SharedModule } from '@project/shared';
 import { FileUploadModule } from '@project/file-upload';
 import { AuthLibModule } from '@project/auth-lib';
 import { MessagingModule } from '@project/messaging';
-import { AmqpConnection, RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
-import { UserService } from '../user/user.service';
-const ENV_USERS_FILE_PATH = path.resolve(__dirname, '../user/.env');
 
 @Module({
   imports: [
@@ -23,7 +20,7 @@ const ENV_USERS_FILE_PATH = path.resolve(__dirname, '../user/.env');
     // SubscriptionModule,
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: ENV_USERS_FILE_PATH,
+      envFilePath: resolve(__dirname, '../user/.env'),
     }),
     // RabbitMQModule.forRootAsync({
     //   useFactory: async (config: ConfigService) => ({

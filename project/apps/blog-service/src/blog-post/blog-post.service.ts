@@ -4,11 +4,14 @@ import { CreateBlogPostDto } from './dto/create-blog-post.dto';
 import { UpdateBlogPostDto } from './dto/update-blog-post.dto';
 import axios from 'axios';
 import { ConfigService } from '@nestjs/config';
+import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
+
 @Injectable()
 export class BlogPostService {
   constructor(
     private readonly prisma: PrismaService,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
+    private readonly amqpConnection: AmqpConnection
   ) {}
 
   async create(createBlogPostDto: CreateBlogPostDto) {
@@ -16,7 +19,7 @@ export class BlogPostService {
     //  перед проверкой и сохранением, но это, думаю, ладно, для тестового проекта и так сойдёт
     const tagTitles = createBlogPostDto.tags || [];
 
-    const payload = {
+    const createdPost = {
       data: Object.entries(createBlogPostDto).reduce((acc, [key, value]) => {
         if (value !== undefined) acc[key] = value;
         return acc;
@@ -42,14 +45,20 @@ export class BlogPostService {
       }));
 
       // @ts-expect-error it is okkkk
-      payload.data.tags = {
+      createdPost.data.tags = {
         connect: allTagIds,
       };
     }
 
+    await this.amqpConnection.publish(
+      this.configService.get<string>('RABBIT_EXCHANGE'),
+      'post.create',
+      createdPost
+    );
+
     // @ts-expect-error it is okkkk
     return this.prisma.post.create({
-      ...payload,
+      ...createdPost,
       include: { tags: true },
     });
   }
@@ -171,9 +180,9 @@ export class BlogPostService {
         title: updateBlogPostDto.title,
         description: updateBlogPostDto.description,
         content: updateBlogPostDto.content,
-        // categories: {
-        //   set: updateBlogPostDto.categoryIds.map((id) => ({ id })),
-        // },
+        tags: {
+          set: updateBlogPostDto.tags.map((id) => ({ id })),
+        },
       },
     });
   }

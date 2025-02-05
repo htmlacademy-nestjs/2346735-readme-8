@@ -48,7 +48,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       useFactory: async (config: ConfigService) => ({
         exchanges: [
           {
-            name: config.get<string>('RABBIT_QUEUE'),
+            name: config.get<string>('RABBIT_EXCHANGE'),
             type: 'direct',
           },
         ],

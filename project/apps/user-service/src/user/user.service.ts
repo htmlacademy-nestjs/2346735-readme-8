@@ -4,10 +4,8 @@ import { Model } from 'mongoose';
 import { User } from './user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-// import { formatDate } from '@project/shared';
 import axios from 'axios';
 import { ConfigService } from '@nestjs/config';
-import { RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 
 @Injectable()
@@ -21,19 +19,16 @@ export class UserService {
   async create(createUserDto: CreateUserDto): Promise<User> {
     const createdUser = new this.userModel(createUserDto);
 
+    await this.amqpConnection.publish(
+      this.configService.get<string>('RABBIT_EXCHANGE'),
+      'user.create',
+      createdUser
+    );
+
     return createdUser.save();
   }
 
   async findAll(): Promise<User[]> {
-    await this.amqpConnection.publish(
-      'typoteka.notify.income',
-      'user.registered',
-      {
-        userId: 123123123,
-        email: 234523452345,
-      }
-    );
-
     return await this.userModel.find().exec();
   }
 
@@ -72,25 +67,5 @@ export class UserService {
 
   async delete(id: string): Promise<User> {
     return await this.userModel.findByIdAndDelete(id).exec();
-  }
-
-  @RabbitSubscribe({
-    exchange: 'typoteka.notify.income',
-    routingKey: 'user.registered',
-    queue: 'notify_queue',
-  })
-  nnnnow(data) {
-    console.log('какая nnnnow data:', data);
-    // return { date: formatDate(new Date()) };
-  }
-
-  @RabbitSubscribe({
-    exchange: 'typoteka.notify.income',
-    routingKey: 'user.registered',
-    queue: 'notify_queue',
-  })
-  now(data) {
-    console.log('какая то data:', data);
-    // return { date: formatDate(new Date()) };
   }
 }

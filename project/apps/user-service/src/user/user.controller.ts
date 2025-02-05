@@ -57,7 +57,6 @@ export class UserController {
 
   @Post('batch')
   async getUsersBatch(@Body() { userIds }: { userIds: string[] }) {
-    // Получаем пользователей по массиву id
     return this.userService.findUsersByIds(userIds);
   }
 
@@ -74,12 +73,6 @@ export class UserController {
   })
   findAll() {
     return this.userService.findAll();
-  }
-
-  @Get('now')
-  // @UseGuards(AuthGuard)
-  now() {
-    return this.userService.now('abc');
   }
 
   @Get('user/:id')

@@ -3,7 +3,6 @@ import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { User, UserSchema } from './user.entity';
 import { MongooseModule } from '@nestjs/mongoose';
-// import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 @Module({
