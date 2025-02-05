@@ -2,10 +2,13 @@ import { resolve } from 'node:path';
 
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
+import { JwtService } from '@nestjs/jwt';
 
 import { PrismaModule } from '@project/prisma';
 import { MessagingModule } from '@project/messaging';
 import { AuthLibModule } from '@project/auth-lib';
+import { jwtConfig } from '@project/auth-lib';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -20,9 +23,6 @@ import { FavoriteService } from '../favorite/favorite.service';
 import { CommentModule } from '../comment/comment.module';
 import { CommentService } from '../comment/comment.service';
 
-import { JwtModule } from '@nestjs/jwt';
-import { JwtService } from '@nestjs/jwt';
-
 @Module({
   imports: [
     PrismaModule.forRoot('apps/blog-post/prisma/schema.prisma'),
@@ -35,12 +35,7 @@ import { JwtService } from '@nestjs/jwt';
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        secret: configService.get<string>('JWT_SECRET'),
-        signOptions: {
-          expiresIn: configService.get<string>('JWT_EXPIRES_IN', '1h'),
-        },
-      }),
+      useFactory: (configService: ConfigService) => jwtConfig(configService),
     }),
     ConfigModule.forRoot({
       envFilePath: resolve(__dirname, '..', '.env'),

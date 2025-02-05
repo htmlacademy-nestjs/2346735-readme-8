@@ -60,13 +60,13 @@ export class User extends Document implements IUser {
 
 const UserSchema = SchemaFactory.createForClass(User);
 
-// UserSchema.pre('save', async function (next) {
-//   if (this.isModified('password') || this.isNew) {
-//     const salt = await bcrypt.genSalt(10);
-//     this.password = await bcrypt.hash(this.password, salt);
-//   }
-//   next();
-// });
+UserSchema.pre('save', async function (next) {
+  if (this.isModified('password') || this.isNew) {
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+  }
+  next();
+});
 
 // UserSchema.set('toJSON', {
 //   transform: function (doc, ret) {

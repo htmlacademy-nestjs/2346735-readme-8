@@ -7,24 +7,13 @@ import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { User, UserSchema } from './user.entity';
 
+import { rabbitMQConfig } from './configs/rabbit-mq.config';
+
 @Module({
   imports: [
     RabbitMQModule.forRootAsync({
-      useFactory: async (config: ConfigService) => ({
-        exchanges: [
-          {
-            name: config.get<string>('RABBIT_QUEUE'),
-            type: 'direct',
-          },
-        ],
-        uri: `amqp://${config.get<string>('RABBIT_USER')}:${config.get<string>(
-          'RABBIT_PASSWORD'
-        )}@${config.get<string>('RABBIT_HOST')}:${config.get<string>(
-          'RABBIT_PORT'
-        )}`,
-        connectionInitOptions: { wait: false },
-        enableControllerDiscovery: true,
-      }),
+      useFactory: async (configService: ConfigService) =>
+        rabbitMQConfig(configService),
       inject: [ConfigService],
       imports: [ConfigModule],
     }),

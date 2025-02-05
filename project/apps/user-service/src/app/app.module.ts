@@ -13,6 +13,8 @@ import { AppService } from './app.service';
 // import { SubscriptionModule } from './subscription/subscription.module';
 import { UserModule } from '../user/user.module';
 
+import { mongooseConfig } from './configs/mongoose.config';
+
 @Module({
   imports: [
     SharedModule,
@@ -26,21 +28,8 @@ import { UserModule } from '../user/user.module';
     }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => {
-        return {
-          uri: `mongodb://${configService.get<string>(
-            'MONGO_USER'
-          )}:${configService.get<string>(
-            'MONGO_PASSWORD'
-          )}@${configService.get<string>(
-            'MONGO_HOST'
-          )}:${configService.get<number>(
-            'MONGO_PORT'
-          )}/${configService.get<string>(
-            'MONGO_DB'
-          )}?authSource=${configService.get<string>('MONGO_AUTH_BASE')}`,
-        };
-      },
+      useFactory: (configService: ConfigService) =>
+        mongooseConfig(configService),
       inject: [ConfigService],
     }),
     UserModule,
