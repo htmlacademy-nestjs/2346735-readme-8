@@ -11,7 +11,7 @@ import { rabbitMQConfig } from './configs/rabbit-mq.config';
 
 @Module({
   imports: [
-    RabbitMQModule.forRootAsync({
+    RabbitMQModule.forRootAsync(RabbitMQModule, {
       useFactory: async (configService: ConfigService) =>
         rabbitMQConfig(configService),
       inject: [ConfigService],

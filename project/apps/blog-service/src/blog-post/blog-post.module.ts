@@ -13,7 +13,7 @@ import { rabbitMQConfig } from './configs/rabbit-mq.config';
 @Module({
   imports: [
     TagModule,
-    RabbitMQModule.forRootAsync({
+    RabbitMQModule.forRootAsync(RabbitMQModule, {
       useFactory: async (configService: ConfigService) =>
         rabbitMQConfig(configService),
       inject: [ConfigService],
