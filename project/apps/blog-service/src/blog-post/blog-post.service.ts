@@ -1,10 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { PrismaService } from '@project/prisma';
 import { CreateBlogPostDto } from './dto/create-blog-post.dto';
 import { UpdateBlogPostDto } from './dto/update-blog-post.dto';
 import axios from 'axios';
 import { ConfigService } from '@nestjs/config';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class BlogPostService {
@@ -17,50 +23,75 @@ export class BlogPostService {
   async create(createBlogPostDto: CreateBlogPostDto) {
     //  c тегами ещё можно сделать чтоб их триммить и привродить к нижнему регистру
     //  перед проверкой и сохранением, но это, думаю, ладно, для тестового проекта и так сойдёт
-    const tagTitles = createBlogPostDto.tags || [];
 
-    const createdPost = {
-      data: Object.entries(createBlogPostDto).reduce((acc, [key, value]) => {
-        if (value !== undefined) acc[key] = value;
-        return acc;
-      }, {}),
-    };
+    try {
+      let params = {};
 
-    if (tagTitles.length) {
-      const existingTags = await this.prisma.tag.findMany({
-        where: { title: { in: tagTitles } },
-      });
+      if (!createBlogPostDto.tags.length) {
+        delete createBlogPostDto.tags;
+      }
 
-      const existingTagTitles = existingTags.map((tag) => tag.title);
-      const newTagTitles = tagTitles.filter(
-        (title) => !existingTagTitles.includes(title)
+      const tagTitles =
+        createBlogPostDto.tags?.length > 0 ? createBlogPostDto.tags : null;
+
+      const createdPost = {
+        data: Object.entries(createBlogPostDto).reduce((acc, [key, value]) => {
+          if (value !== undefined) acc[key] = value;
+          return acc;
+        }, {}),
+      };
+
+      if (tagTitles?.length) {
+        const existingTags = await this.prisma.tag.findMany({
+          where: { title: { in: tagTitles } },
+        });
+
+        const existingTagTitles = existingTags.map((tag) => tag.title);
+
+        const newTagTitles = tagTitles.filter(
+          (title) => !existingTagTitles.includes(title)
+        );
+
+        if (newTagTitles.length > 0) {
+          const newTags = await Promise.all(
+            newTagTitles.map((title) =>
+              this.prisma.tag.create({ data: { title } })
+            )
+          );
+
+          const allTagIds = [...existingTags, ...newTags].map((tag) => ({
+            id: tag.id,
+          }));
+
+          // @ts-expect-error it is okkkk
+          createdPost.data.tags = {
+            connect: allTagIds,
+          };
+
+          params = { include: { tags: true } };
+        }
+      }
+
+      await this.amqpConnection.publish(
+        this.configService.get<string>('RABBIT_EXCHANGE'),
+        'post.create',
+        createdPost
       );
-
-      const newTags = await Promise.all(
-        newTagTitles.map((title) => this.prisma.tag.create({ data: { title } }))
-      );
-
-      const allTagIds = [...existingTags, ...newTags].map((tag) => ({
-        id: tag.id,
-      }));
 
       // @ts-expect-error it is okkkk
-      createdPost.data.tags = {
-        connect: allTagIds,
-      };
+      return this.prisma.post.create({
+        ...createdPost,
+        ...params,
+      });
+    } catch (error) {
+      if (error.code === 'P2002') {
+        throw new ConflictException('Пост с таким заголовком уже существует');
+      } else if (error instanceof Prisma.PrismaClientValidationError) {
+        throw new BadRequestException('Некорректные данные для поста');
+      } else {
+        throw new InternalServerErrorException('Не удалось создать пост');
+      }
     }
-
-    await this.amqpConnection.publish(
-      this.configService.get<string>('RABBIT_EXCHANGE'),
-      'post.create',
-      createdPost
-    );
-
-    // @ts-expect-error it is okkkk
-    return this.prisma.post.create({
-      ...createdPost,
-      include: { tags: true },
-    });
   }
 
   async findAll({
@@ -74,6 +105,9 @@ export class BlogPostService {
     status = 'PUBLISHED',
   }) {
     const skip = (page - 1) * limit;
+    console.log('limit', limit);
+    console.log('page', page);
+    console.log('skip', skip);
 
     const validSortFields = {
       likesCount: { favorite: { _count: order } },
@@ -193,7 +227,8 @@ export class BlogPostService {
     });
   }
 
-  async getCountByUserId(userId: string) {
-    return this.prisma.post.count({ where: { userId } });
+  async getPostCountByUserId(userId: string) {
+    const postCount = await this.prisma.post.count({ where: { userId } });
+    return { postCount };
   }
 }

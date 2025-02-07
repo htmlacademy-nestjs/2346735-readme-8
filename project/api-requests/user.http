@@ -1,0 +1,35 @@
+### Создать пользователя
+POST http://localhost:3000/api/user
+
+{
+  "name": "John Doe",
+  "email": "johndoee@example.com",
+  "password": "securepassword"
+}
+
+
+### Получить пользователя по email
+GET http://localhost:3000/api/user-by-email?email=johndoe@example.com
+
+### Получить всех пользователей
+GET http://localhost:3000/api/user
+
+### Получить пользователя по ID
+GET http://localhost:3000/api/user/67a61d66ece07de403a47d81
+
+### Обновить пользователя
+PATCH http://localhost:3000/api/user/67a61d66ece07de403a47d81
+
+{
+  "name": "John Updated"
+}
+
+### Удалить пользователя
+DELETE http://localhost:3000/api/user/67a61d66ece07de403a47d81
+
+### Получить список пользователей по массиву userIds
+POST http://localhost:3000/api/batch
+
+{
+  "userIds": ["67a61d66ece07de403a47d81"]
+}

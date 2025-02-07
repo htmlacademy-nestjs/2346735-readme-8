@@ -33,18 +33,6 @@ export class CommentController {
     return this.commentService.create(body.userId, body.postId, body.content);
   }
 
-  @Put(':id')
-  @UseGuards(OwnerGuard)
-  @ApiOperation({ summary: 'Replace an existing comment' })
-  @ApiParam({ name: 'id', description: 'Comment ID', type: String })
-  @ApiBody({
-    description: 'New content for the comment',
-    type: Object,
-  })
-  async replace(@Param('id') id: string, @Body() body: UpdateCommentDto) {
-    return this.commentService.update(id, body.content);
-  }
-
   @Patch(':id')
   @UseGuards(OwnerGuard)
   @ApiOperation({ summary: 'Update an existing comment' })

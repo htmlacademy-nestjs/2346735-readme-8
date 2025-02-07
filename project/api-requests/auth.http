@@ -1,0 +1,32 @@
+### Register
+POST http://localhost:3001/api/auth/register
+
+{
+  "name": "User name",
+  "password": "SomePass123",
+  "email": "email123@example.com"
+}
+
+### Login
+POST http://localhost:3001/api/auth/login
+
+{
+  "email": "email123@example.com",
+  "password": "SomePass123"
+}
+
+### Change Password
+POST http://localhost:3001/api/auth/change-password
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVtYWlsMTIzQGV4YW1wbGUuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkbG1jeTFDTllVVjVFRkFVZnFwL3p2T0gyQ095aW56NmNsZXM0M3FMNUp3L3I5UTJkOTBLbS4iLCJpYXQiOjE3Mzg5NDMzODUsImV4cCI6MTczODk0Njk4NX0.SjxnmSLCRR6NbLqavvxIp_58lKQ4zCeNt14jLlBsBnI
+
+{
+  "userId": "67a62b8fa695076836829d75",
+  "changePasswordDto": {
+    "oldPassword": "SomePass123",
+    "newPassword": "SomeNewPass123"
+  }
+}
+
+### Protected Data
+GET http://localhost:3001/api/auth/protected
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVtYWlsMTIzQGV4YW1wbGUuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkbG1jeTFDTllVVjVFRkFVZnFwL3p2T0gyQ095aW56NmNsZXM0M3FMNUp3L3I5UTJkOTBLbS4iLCJpYXQiOjE3Mzg5NDMzODUsImV4cCI6MTczODk0Njk4NX0.SjxnmSLCRR6NbLqavvxIp_58lKQ4zCeNt14jLlBsBnI

@@ -1,0 +1,22 @@
+### Get All Tags
+GET http://localhost:3002/api/tag
+
+### Create Tag
+POST http://localhost:3002/api/tag
+
+{
+  "title": "New Tag"
+}
+
+### Get Tag by ID
+GET http://localhost:3002/api/tag/42227d8c-13f5-4dca-b899-8b019cf8aef4
+
+### Update Tag by ID
+PATCH http://localhost:3002/api/tag/42227d8c-13f5-4dca-b899-8b019cf8aef4
+
+{
+  "title": "Updated Tag"
+}
+
+### Delete Tag by ID
+DELETE http://localhost:3002/api/tag/3cfee3bf-b9cf-403e-b1eb-62c0945015e6

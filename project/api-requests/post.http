@@ -1,0 +1,55 @@
+### Создать новый пост
+POST http://localhost:3002/api/post
+
+{
+  "title": "Новый пост",
+  "content": "Текст поста",
+  "description": "Описание поста",
+  "status": "DRAFT",
+  "userId": "67a621e3a695076836829d65",
+  "type": "TEXT",
+  "tags": []
+}
+
+### Репост существующего поста
+POST http://localhost:3002/api/post/repost?userId=679aa361b3003cc659259425
+
+{
+  "id": "cm6uwl5uq0000vjvcy7hvxcaq",
+  "userId": "67a621e3a695076836829d65",
+  "originalPostId": null,
+  "originalUserId": null,
+  "title": "Новый пост",
+  "description": "Описание поста",
+  "content": "Текст поста",
+  "createdAt": "2025-02-07T15:10:24.429Z",
+  "updatedAt": "2025-02-07T15:10:24.429Z",
+  "status": "DRAFT",
+  "type": "TEXT",
+  "photoSrc": null,
+  "author": null,
+  "announcement": null,
+  "url": null,
+  "videoUrl": null,
+  "tags": []
+}
+
+### Получить количество постов пользователя
+GET http://localhost:3002/api/post/count?userId=67a621e3a695076836829d65
+
+### Получить список постов (с пагинацией, сортировкой и фильтрацией)
+GET http://localhost:3002/api/post?page=1&limit=10&sortBy=likesCount&order=desc&status=PUBLISHED
+
+### Получить конкретный пост по ID
+GET http://localhost:3002/api/post/cm6uwl5uq0000vjvcy7hvxcaq
+
+### Обновить пост (доступно только владельцу)
+PATCH http://localhost:3002/api/post/cm6l1i5970000vjk4fdqohfb6
+
+{
+  "title": "Обновленный заголовок",
+  "content": "Обновленный текст"
+}
+
+### Удалить пост (доступно только владельцу)
+DELETE http://localhost:3002/api/post/post-123
