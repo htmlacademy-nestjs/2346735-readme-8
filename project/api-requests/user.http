@@ -1,4 +1,4 @@
-### Создать пользователя
+### Create a User
 POST http://localhost:3000/api/user
 
 {
@@ -7,27 +7,26 @@ POST http://localhost:3000/api/user
   "password": "securepassword"
 }
 
-
-### Получить пользователя по email
+### Get User by Email
 GET http://localhost:3000/api/user-by-email?email=johndoe@example.com
 
-### Получить всех пользователей
+### Get All Users
 GET http://localhost:3000/api/user
 
-### Получить пользователя по ID
+### Get User by ID
 GET http://localhost:3000/api/user/67a61d66ece07de403a47d81
 
-### Обновить пользователя
+### Update User
 PATCH http://localhost:3000/api/user/67a61d66ece07de403a47d81
 
 {
   "name": "John Updated"
 }
 
-### Удалить пользователя
+### Delete User
 DELETE http://localhost:3000/api/user/67a61d66ece07de403a47d81
 
-### Получить список пользователей по массиву userIds
+### Get Users List by Array of userIds
 POST http://localhost:3000/api/batch
 
 {

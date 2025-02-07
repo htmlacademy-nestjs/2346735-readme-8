@@ -16,9 +16,7 @@ export class AuthService {
   ) {}
 
   async login(loginDto: LoginDto) {
-    console.log('loginDto', loginDto);
     const user = await this.validateUser(loginDto.email, loginDto.password);
-    console.log('user', user);
 
     if (!user) {
       throw new HttpException(
@@ -116,9 +114,7 @@ export class AuthService {
           'USER_SERVICE_URL'
         )}/api/user-by-email?email=${email}`
       );
-      console.log('---user validateUser------------------------');
-      console.log(user);
-      console.log('----user-----------------------');
+
       if (!user) {
         return null;
       }

@@ -105,9 +105,6 @@ export class BlogPostService {
     status = 'PUBLISHED',
   }) {
     const skip = (page - 1) * limit;
-    console.log('limit', limit);
-    console.log('page', page);
-    console.log('skip', skip);
 
     const validSortFields = {
       likesCount: { favorite: { _count: order } },
