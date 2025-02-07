@@ -10,6 +10,9 @@
 // Создать библиотеку nx
 // nx generate @nx/node:library libs/<lib-name>
 
+// Создать микросервис nx
+// npx nx g @nx/nest:app --directory apps/app-name
+
 // Сгенерировать prisma client и просидировать базу
 // cd project/apps/blog-service
 // npx prisma generate

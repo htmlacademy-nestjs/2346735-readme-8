@@ -1,0 +1,55 @@
+### Create a New Post
+POST http://localhost:3002/api/post
+
+{
+  "title": "New Post",
+  "content": "Post text",
+  "description": "Post description",
+  "status": "DRAFT",
+  "userId": "67a621e3a695076836829d65",
+  "type": "TEXT",
+  "tags": []
+}
+
+### Repost an Existing Post
+POST http://localhost:3002/api/post/repost?userId=679aa361b3003cc659259425
+
+{
+  "id": "cm6uwl5uq0000vjvcy7hvxcaq",
+  "userId": "67a621e3a695076836829d65",
+  "originalPostId": null,
+  "originalUserId": null,
+  "title": "New Post",
+  "description": "Post description",
+  "content": "Post text",
+  "createdAt": "2025-02-07T15:10:24.429Z",
+  "updatedAt": "2025-02-07T15:10:24.429Z",
+  "status": "DRAFT",
+  "type": "TEXT",
+  "photoSrc": null,
+  "author": null,
+  "announcement": null,
+  "url": null,
+  "videoUrl": null,
+  "tags": []
+}
+
+### Get the Count of Posts by User
+GET http://localhost:3002/api/post/count?userId=67a621e3a695076836829d65
+
+### Get List of Posts (with pagination, sorting, and filtering)
+GET http://localhost:3002/api/post?page=1&limit=10&sortBy=likesCount&order=desc&status=PUBLISHED
+
+### Get a Specific Post by ID
+GET http://localhost:3002/api/post/cm6uwl5uq0000vjvcy7hvxcaq
+
+### Update Post (Available to the Owner Only)
+PATCH http://localhost:3002/api/post/cm6l1i5970000vjk4fdqohfb6
+
+{
+  "title": "Updated Title",
+  "content": "Updated Text"
+}
+
+### Delete Post (Available to the Owner Only)
+DELETE http://localhost:3002/api/post/post-123

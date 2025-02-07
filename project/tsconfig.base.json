@@ -17,6 +17,7 @@
     "paths": {
       "@project/auth-lib": ["libs/auth-lib/src/index.ts"],
       "@project/file-upload": ["libs/file-upload/src/index.ts"],
+      "@project/interceptors": ["libs/interceptors/src/index.ts"],
       "@project/messaging": ["libs/messaging/src/index.ts"],
       "@project/prisma": ["libs/prisma/src/index.ts"],
       "@project/send-email": ["libs/send-email/src/index.ts"],

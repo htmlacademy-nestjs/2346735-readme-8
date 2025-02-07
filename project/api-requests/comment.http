@@ -1,0 +1,24 @@
+### Create a New Comment
+POST http://localhost:3002/api/comment
+
+{
+  "userId": "67a621e3a695076836829d65",
+  "postId": "cm6l1i5970000vjk4fdqohfb6",
+  "content": "This is a comment"
+}
+
+### Update an Existing Comment (@UseGuards(OwnerGuard))
+PATCH http://localhost:3002/api/comment/7c07e303-95bf-497a-82f8-04d266ad4ad5
+
+{
+  "content": "Updated comment content"
+}
+
+### Delete a Comment (@UseGuards(OwnerGuard))
+DELETE http://localhost:3002/api/comment/7c07e303-95bf-497a-82f8-04d266ad4ad5
+
+### Get All Comments for a Post
+GET http://localhost:3002/api/comment/post/cm6l1i5970000vjk4fdqohfb6
+
+### Get All Comments by a User
+GET http://localhost:3002/api/comment/user/67a621e3a695076836829d65

@@ -23,10 +23,12 @@ export class FavoriteService {
     });
   }
 
-  async countByPost(postId: string): Promise<number> {
-    return this.prisma.favorite.count({
+  async countByPost(postId: string): Promise<{ favoriteCount: number }> {
+    const favoriteCount = await this.prisma.favorite.count({
       where: { postId },
     });
+
+    return { favoriteCount };
   }
 
   async findByUser(userId: string): Promise<Favorite[]> {

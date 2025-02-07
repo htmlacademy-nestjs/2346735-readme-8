@@ -1,0 +1,34 @@
+### Create a User
+POST http://localhost:3000/api/user
+
+{
+  "name": "John Doe",
+  "email": "johndoee@example.com",
+  "password": "securepassword"
+}
+
+### Get User by Email
+GET http://localhost:3000/api/user-by-email?email=johndoe@example.com
+
+### Get All Users
+GET http://localhost:3000/api/user
+
+### Get User by ID
+GET http://localhost:3000/api/user/67a61d66ece07de403a47d81
+
+### Update User
+PATCH http://localhost:3000/api/user/67a61d66ece07de403a47d81
+
+{
+  "name": "John Updated"
+}
+
+### Delete User
+DELETE http://localhost:3000/api/user/67a61d66ece07de403a47d81
+
+### Get Users List by Array of userIds
+POST http://localhost:3000/api/batch
+
+{
+  "userIds": ["67a61d66ece07de403a47d81"]
+}

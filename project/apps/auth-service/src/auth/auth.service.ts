@@ -25,7 +25,12 @@ export class AuthService {
       );
     }
 
-    const payload = { username: user.email, userId: user.id };
+    const payload = {
+      email: user.email,
+      password: user.password,
+      userId: user.id,
+    };
+
     return {
       token: this.jwtService.sign(payload),
     };
@@ -44,14 +49,18 @@ export class AuthService {
       throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
     }
 
-    const hashedPassword = await hash(password, 10);
+    // const hashedPassword = await hash(password, 10);
 
     const { data: newUser } = await axios.post(
       `${this.configService.get<string>('USER_SERVICE_URL')}/api/user`,
-      { email, password: hashedPassword, name }
+      { email, password, name }
     );
 
-    const payload = { username: newUser.email, userId: newUser.id };
+    const payload = {
+      email: newUser.email,
+      password: newUser.password,
+      userId: newUser.id,
+    };
 
     return {
       message: 'User registered successfully',
@@ -59,7 +68,13 @@ export class AuthService {
     };
   }
 
-  async changePassword(userId: string, changePasswordDto: ChangePasswordDto) {
+  async changePassword({
+    userId,
+    changePasswordDto,
+  }: {
+    userId: string;
+    changePasswordDto: ChangePasswordDto;
+  }) {
     const { oldPassword, newPassword } = changePasswordDto;
 
     const { data: user } = await axios.get(
@@ -92,7 +107,7 @@ export class AuthService {
   async validateUser(
     email: string,
     password: string
-  ): Promise<{ email: string; id: string } | null> {
+  ): Promise<{ email: string; id: string; password: string } | null> {
     try {
       const { data: user } = await axios.get(
         `${this.configService.get<string>(

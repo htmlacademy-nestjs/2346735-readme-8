@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { ConfigService } from '@nestjs/config';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
@@ -20,15 +24,24 @@ export class UserService {
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-    const createdUser = new this.userModel(createUserDto);
+    try {
+      const createdUser = new this.userModel(createUserDto);
 
-    await this.amqpConnection.publish(
-      this.configService.get<string>('RABBIT_EXCHANGE'),
-      'user.create',
-      createdUser
-    );
+      await this.amqpConnection.publish(
+        this.configService.get<string>('RABBIT_EXCHANGE'),
+        'user.create',
+        createdUser
+      );
 
-    return createdUser.save();
+      return await createdUser.save();
+    } catch (error) {
+      if (error.code === 11000) {
+        throw new BadRequestException(
+          'Пользователь с таким email уже существует'
+        );
+      }
+      throw new InternalServerErrorException('Не удалось создать пользователя');
+    }
   }
 
   async findAll(): Promise<User[]> {

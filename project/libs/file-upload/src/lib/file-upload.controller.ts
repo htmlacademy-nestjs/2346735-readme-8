@@ -15,6 +15,8 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import * as mime from 'mime-types';
 
+const ALLOWED_MIMES = ['image/jpeg', 'image/jpg', 'image/png'];
+
 @ApiTags('file-upload')
 @Controller('file-upload')
 export class FileUploadController {
@@ -56,9 +58,7 @@ export class FileUploadController {
         fileSize: 2 * 1024 * 1024, // 2 MB limit
       },
       fileFilter: (req, file, callback) => {
-        const allowedMimes = ['image/jpeg', 'image/jpg', 'image/png'];
-
-        if (!allowedMimes.includes(file.mimetype)) {
+        if (!ALLOWED_MIMES.includes(file.mimetype)) {
           return callback(new Error('Invalid file type'), false);
         }
 
