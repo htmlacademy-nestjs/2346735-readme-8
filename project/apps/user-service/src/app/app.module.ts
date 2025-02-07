@@ -10,7 +10,6 @@ import { MessagingModule } from '@project/messaging';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-// import { SubscriptionModule } from './subscription/subscription.module';
 import { UserModule } from '../user/user.module';
 
 import { mongooseConfig } from './configs/mongoose.config';
@@ -21,7 +20,6 @@ import { mongooseConfig } from './configs/mongoose.config';
     FileUploadModule,
     AuthLibModule,
     MessagingModule,
-    // SubscriptionModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: resolve(__dirname, '../user/.env'),

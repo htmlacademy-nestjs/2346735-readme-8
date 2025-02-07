@@ -59,7 +59,13 @@ export class AuthService {
     };
   }
 
-  async changePassword(userId: string, changePasswordDto: ChangePasswordDto) {
+  async changePassword({
+    userId,
+    changePasswordDto,
+  }: {
+    userId: string;
+    changePasswordDto: ChangePasswordDto;
+  }) {
     const { oldPassword, newPassword } = changePasswordDto;
 
     const { data: user } = await axios.get(

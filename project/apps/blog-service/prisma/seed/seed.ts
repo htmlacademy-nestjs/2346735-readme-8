@@ -3,7 +3,7 @@ const prisma = new PrismaClient();
 
 const crypto = require('node:crypto');
 
-const userIds = [
+const USER_IDS = [
   '679aa361b3003cc659259425',
   '679aa43ab3003cc65925942c',
   '679aa5bab3003cc659259432',
@@ -46,7 +46,8 @@ async function main() {
       const randomType =
         postTypes[Math.floor(Math.random() * postTypes.length)];
 
-      const randomUserId = userIds[Math.floor(Math.random() * userIds.length)];
+      const randomUserId =
+        USER_IDS[Math.floor(Math.random() * USER_IDS.length)];
 
       const postData = {
         title: `Post Title ${i + 1}`,

@@ -1,12 +1,4 @@
-import {
-  Get,
-  UseGuards,
-  Controller,
-  Post,
-  Body,
-  HttpException,
-  HttpStatus,
-} from '@nestjs/common';
+import { Get, UseGuards, Controller, Post, Body } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from '@project/auth-lib';
 import { ChangePasswordDto } from './dto/change-password.dto';
@@ -40,11 +32,7 @@ export class AuthController {
   async changePassword(
     @Body() body: { userId: string; changePasswordDto: ChangePasswordDto }
   ) {
-    const { userId, changePasswordDto } = body;
-    if (!userId) {
-      throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
-    }
-    return this.authService.changePassword(userId, changePasswordDto);
+    return this.authService.changePassword(body);
   }
 
   @Get('/protected')

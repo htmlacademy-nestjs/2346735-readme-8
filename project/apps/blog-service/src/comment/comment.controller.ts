@@ -54,10 +54,7 @@ export class CommentController {
     type: Object,
   })
   async update(@Param('id') id: string, @Body() body: UpdateCommentDto) {
-    if (body.content) {
-      return this.commentService.update(id, body.content);
-    }
-    return { message: 'No changes provided' };
+    return this.commentService.update(id, body.content);
   }
 
   @Delete(':id')
